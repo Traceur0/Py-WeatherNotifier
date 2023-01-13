@@ -1,0 +1,38 @@
+data = { "template_object" : json.dumps({
+    "object_type" : "feed", # Necessary
+    "content" : {
+        "title" : "Today's WeatherForecast"
+        }, # Necessary
+    "item_content" : {
+        "profile_text" : "오늘의 날씨",
+        "title_image_text" : OW_dic_wthr["description"],
+        "title_image_category" : OW_dic_wthr["main"],
+        "items" : [
+            {
+                "item" :"평균기온",
+                "item_op" : str(OW_dic_main["temp"])
+            },
+            {
+                "item" :"체감기온",
+                "item_op" : str(OW_dic_main["feels_like"])
+            },
+            {
+                "item" :"최저기온",
+                "item_op" : str(OW_dic_main["temp_min"])
+            },
+            {
+                "item" :"최고기온",
+                "item_op" : str(OW_dic_main["temp_max"])
+            }
+        ] 
+    },
+    "buttons" : [
+        {
+            "title" : "네이버 날씨",
+            "link" : {
+                "mobile_url" : "https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=오늘+서울+날씨"
+            }
+        }
+    ]
+})
+}
