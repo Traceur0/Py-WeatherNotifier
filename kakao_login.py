@@ -6,7 +6,7 @@ from weather_info import open_wthr_info, naver_wthr_info
 
 
 
-ouath_url = "https://kauth.kakao.com/oauth/token"
+oauth_url = "https://kauth.kakao.com/oauth/token"
 
 with open("./plaintext/key.json", "r") as key_file:
     key_json = json.load(key_file)
@@ -39,7 +39,7 @@ def Issue_refresh_token():
             json.dump(token, token_json, indent="\t")
 
 
-    request_POST(ouath_url, data)
+    request_POST(oauth_url, data)
     with open("./plaintext/k_token.json", "r") as token_json:
         token_read = json.load(token_json)
     # save issued value : refresh_token in key.json
