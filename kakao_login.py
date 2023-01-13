@@ -29,7 +29,7 @@ def Issue_refresh_token():
         "refresh_token" : rf_token,
     }
 
-    # request URL / data : additional requestInfo(parameter)
+    # request URL / data : additional requestInfo(parameter) ==> 이 부분을 함수로 만들지 말고, 58번 행에는 변수명을 다르게 하여 작성해보자
     def request_POST(url, param):
         request_POST = requests.post(url, data=param)
         token = request_POST.json()
