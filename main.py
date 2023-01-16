@@ -1,6 +1,6 @@
-from kakao_login import Issue_refresh_token, Send_message
+from kakao_login import issue_refresh_token, send_message
 
 
 
-token = Issue_refresh_token()
-Send_message(token)
+access_token = issue_refresh_token()
+send_message(access_token)

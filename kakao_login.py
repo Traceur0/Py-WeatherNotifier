@@ -6,11 +6,12 @@ from weather_info import open_wthr_info, naver_wthr_info
 
 
 
+# 토큰발급 URL
 oauth_url = "https://kauth.kakao.com/oauth/token"
 
 with open("./plaintext/key.json", "r") as key_file:
     key_json = json.load(key_file)
-key_K = key_json["kakaoTalk"]["kakao_key"]
+REQUEST_KEY = key_json["kakaoTalk"]["kakao_key"]
 authorization_code = key_json["kakaoTalk"]["authorization_code"]
 # REFRESH TOKEN
 rf_token = key_json["kakaoTalk"]["refresh_token"]
@@ -18,30 +19,31 @@ rf_token = key_json["kakaoTalk"]["refresh_token"]
 REDIRECT_URI = "https://example.com/oauth"
 
 # 토큰 재발행을 위한 코드를 발급하는 URL
-reissuance_url = f"https://kauth.kakao.com/oauth/authorize?client_id={key_K}&redirect_uri={REDIRECT_URI}&response_type=code"
+reissuance_url = f"https://kauth.kakao.com/oauth/authorize?client_id={REQUEST_KEY}&redirect_uri={REDIRECT_URI}&response_type=code"
 
-def Issue_refresh_token(): 
+
+def issue_refresh_token(): 
     data = {
         "grant_type" : "refresh_token",
-        "client_id" : key_K,
+        "client_id" : REQUEST_KEY,
         "redirect_URI" : REDIRECT_URI,
         "code" : authorization_code,
         "refresh_token" : rf_token,
     }
 
     # request URL / data : additional requestInfo(parameter) ==> 이 부분을 함수로 만들지 말고, 58번 행에는 변수명을 다르게 하여 작성해보자
-    def request_POST(url, param):
-        request_POST = requests.post(url, data=param)
-        token = request_POST.json()
-
-        # save responseInfo in .json (allocating to variable)
-        with open("./plaintext/k_token.json", "w") as token_json:
-            json.dump(token, token_json, indent="\t")
 
 
-    request_POST(oauth_url, data)
+    ###  ERROR  ###
+    ###  1  ####
+    oauth_request_POST = requests.post(oauth_url, data=data)
+    token = oauth_request_POST.json()
+
+    with open("./plaintext/k_token.json", "w") as token_json:
+        json.dump(token, token_json, indent="\t")
     with open("./plaintext/k_token.json", "r") as token_json:
         token_read = json.load(token_json)
+    ###
     # save issued value : refresh_token in key.json
     try: 
         refresh = token_read["refresh_token"]
@@ -53,19 +55,33 @@ def Issue_refresh_token():
         key_f_token_json["kakaoTalk"]["refresh_token"] = refresh
 
     try:
-        result = token_read["access_token"]
+        result = token_read["access_token"] ### access_token ==> 함수 외부로 뺴내야 함
     except KeyError:
-        request_POST(reissuance_url, data)
-        Issue_refresh_token()
+        ###  2  ###
+        reissuance_request_POST = requests.post(reissuance_url, data=data)
+        reissuance = reissuance_request_POST.json()
+
+        with open("./plaintext/k_token.json", "w") as reissuance_json:
+            json.dump(reissuance, reissuance_json, indent="\t")
+        ###
+        issue_refresh_token()
     return result
+    ###  ERROR  ###
 
 
-def Send_message(access_token):
-    msg_sending_URL = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
+headers = {
+    'Authorization' : "Bearer " + access_token
+}
 
-    headers = {
-        'Authorization' : "Bearer " + access_token
+
+def renew_token():
+    data = {
+        
     }
+
+
+def send_message():
+    msg_sending_URL = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
 
     data = { "template_object" : {
             "object_type": "list",
@@ -105,15 +121,3 @@ def Send_message(access_token):
 
     msg_rqst = requests.post(msg_sending_URL, headers=headers, data=data)
     return print(msg_rqst.content, access_token)
-
-
-'''
-data = { "template_object" : {
-        "object_type" : "text",
-        "text" : "weatherForecast",
-        "link" : {
-            "web_url" : "https://m.search.naver.com/search.naver?sm=mtp_hty.top&where=m&query=오늘+서울+날씨"
-        }
-    }
-}
-'''
