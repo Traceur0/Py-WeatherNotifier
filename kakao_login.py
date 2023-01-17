@@ -2,16 +2,15 @@ import requests
 import json
 
 from weather_info import open_wthr_info, naver_wthr_info
-from url import REDIRECT_URI, reissuance_url, oauth_url, msg_sending_URL
+from url import REDIRECT_URI, renew_URL, OAUTH_URL, SEND_MSG_URL
 
 
 
 with open("./plaintext/key.json", "r") as key_file:
     key_json = json.load(key_file)
 REQUEST_KEY = key_json["kakaoTalk"]["kakao_key"]
-authorization_code = key_json["kakaoTalk"]["authorization_code"]
-# REFRESH TOKEN
-rf_token = key_json["kakaoTalk"]["refresh_token"]
+AUTH_code = key_json["kakaoTalk"]["authorization_code"]
+RF_token = key_json["kakaoTalk"]["refresh_token"]
 
 
 def issue_refresh_token(): 
@@ -19,26 +18,22 @@ def issue_refresh_token():
         "grant_type" : "refresh_token",
         "client_id" : REQUEST_KEY,
         "redirect_URI" : REDIRECT_URI,
-        "code" : authorization_code,
-        "refresh_token" : rf_token,
+        "code" : AUTH_code,
+        "refresh_token" : RF_token,
     }
 
-    # request URL / data : additional requestInfo(parameter) ==> 이 부분을 함수로 만들지 말고, 58번 행에는 변수명을 다르게 하여 작성해보자
-
-
     ###  ERROR  ###
-    ###  1  ####
-    oauth_request_POST = requests.post(oauth_url, data=data)
+    oauth_request_POST = requests.post(OAUTH_URL, data=data)
     token = oauth_request_POST.json()
 
     with open("./plaintext/k_token.json", "w") as token_json:
         json.dump(token, token_json, indent="\t")
     with open("./plaintext/k_token.json", "r") as token_json:
-        token_read = json.load(token_json)
-    ###
+        token_data = json.load(token_json)
+    
     # save issued value : refresh_token in key.json
     try: 
-        refresh = token_read["refresh_token"]
+        refresh = token_data["refresh_token"]
     except KeyError: # if error occured
         print("NOTICE : lastest refresh token is still valid.")
     else: # if error not occured
@@ -46,21 +41,21 @@ def issue_refresh_token():
             key_f_token_json = json.load(code_json)
         key_f_token_json["kakaoTalk"]["refresh_token"] = refresh
 
+    # *무슨 절차인지 기술할 것* 
     try:
-        result = token_read["access_token"] ### access_token ==> 함수 외부로 뺴내야 함
+        result = token_data["access_token"] ### access_token ==> 함수 외부로 뺴내야 함
     except KeyError:
-        ###  2  ###
-        reissuance_request_POST = requests.post(reissuance_url, data=data)
-        reissuance = reissuance_request_POST.json()
+        renew_request_POST = requests.post(renew_URL, data=data)
+        renew = renew_request_POST.json()
 
-        with open("./plaintext/k_token.json", "w") as reissuance_json:
-            json.dump(reissuance, reissuance_json, indent="\t")
-        ###
+        with open("./plaintext/k_token.json", "w") as renew_json:
+            json.dump(renew, renew_json, indent="\t")
         issue_refresh_token()
     return result
     ###  ERROR  ###
 
 
+# access_token값 배정하기
 headers = {
     'Authorization' : "Bearer " + access_token
 }
@@ -109,5 +104,6 @@ def send_message():
         }
     }
 
-    msg_rqst = requests.post(msg_sending_URL, headers=headers, data=data)
+    # URL로 POST 요청
+    msg_rqst = requests.post(SEND_MSG_URL, headers=headers, data=data)
     return print(msg_rqst.content, access_token)
