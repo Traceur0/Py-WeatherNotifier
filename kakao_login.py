@@ -1,13 +1,10 @@
 import requests
 import json
 
-
 from weather_info import open_wthr_info, naver_wthr_info
+from url import REDIRECT_URI, reissuance_url, oauth_url, msg_sending_URL
 
 
-
-# 토큰발급 URL
-oauth_url = "https://kauth.kakao.com/oauth/token"
 
 with open("./plaintext/key.json", "r") as key_file:
     key_json = json.load(key_file)
@@ -15,11 +12,6 @@ REQUEST_KEY = key_json["kakaoTalk"]["kakao_key"]
 authorization_code = key_json["kakaoTalk"]["authorization_code"]
 # REFRESH TOKEN
 rf_token = key_json["kakaoTalk"]["refresh_token"]
-
-REDIRECT_URI = "https://example.com/oauth"
-
-# 토큰 재발행을 위한 코드를 발급하는 URL
-reissuance_url = f"https://kauth.kakao.com/oauth/authorize?client_id={REQUEST_KEY}&redirect_uri={REDIRECT_URI}&response_type=code"
 
 
 def issue_refresh_token(): 
@@ -81,8 +73,6 @@ def renew_token():
 
 
 def send_message():
-    msg_sending_URL = "https://kapi.kakao.com/v2/api/talk/memo/default/send"
-
     data = { "template_object" : {
             "object_type": "list",
             "header_title": "오늘 서울 기온",
