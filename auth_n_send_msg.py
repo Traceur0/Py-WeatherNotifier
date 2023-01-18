@@ -6,9 +6,10 @@ from url import REDIRECT_URI, renew_URL, OAUTH_URL, SEND_MSG_URL
 
 
 
+
 with open("./plaintext/key.json", "r") as key_file:
     key_json = json.load(key_file)
-REQUEST_KEY = key_json["kakaoTalk"]["kakao_key"]
+REQUEST_KEY = key_json["kakaoTalk"]["kakao_api_key"]
 AUTH_code = key_json["kakaoTalk"]["authorization_code"]
 RF_token = key_json["kakaoTalk"]["refresh_token"]
 
@@ -26,9 +27,9 @@ def issue_refresh_token():
     oauth_request_POST = requests.post(OAUTH_URL, data=data)
     token = oauth_request_POST.json()
 
-    with open("./plaintext/k_token.json", "w") as token_json:
+    with open("./plaintext/token_response.json", "w") as token_json:
         json.dump(token, token_json, indent="\t")
-    with open("./plaintext/k_token.json", "r") as token_json:
+    with open("./plaintext/token_response.json", "r") as token_json:
         token_data = json.load(token_json)
     
     # save issued value : refresh_token in key.json
@@ -39,21 +40,23 @@ def issue_refresh_token():
     else: # if error not occured
         with open("./plaintext/key.json", "r") as code_json:
             key_f_token_json = json.load(code_json)
-        key_f_token_json["kakaoTalk"]["refresh_token"] = refresh
+        key_f_token_json["kakaoTalk"]["refresh_token"] = refresh ### ?
 
-    # *무슨 절차인지 기술할 것* 
+    # *무슨 절차인지 기술할 것*
     try:
-        result = token_data["access_token"] ### access_token ==> 함수 외부로 뺴내야 함
+        result = token_data["access_token"] # return
     except KeyError:
         renew_request_POST = requests.post(renew_URL, data=data)
         renew = renew_request_POST.json()
 
-        with open("./plaintext/k_token.json", "w") as renew_json:
+        with open("./plaintext/token_response.json", "w") as renew_json:
             json.dump(renew, renew_json, indent="\t")
         issue_refresh_token()
     return result
     ###  ERROR  ###
 
+
+access_token = issue_refresh_token()
 
 # access_token값 배정하기
 headers = {
@@ -68,6 +71,7 @@ def renew_token():
 
 
 def send_message():
+    # KakaoTalk Rest API parameter
     data = { "template_object" : {
             "object_type": "list",
             "header_title": "오늘 서울 기온",
