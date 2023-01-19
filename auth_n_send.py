@@ -1,76 +1,80 @@
-import requests
 import json
+import requests
+from time import strftime
 
 from weather_info import open_wthr_info, naver_wthr_info
-from url import REDIRECT_URI, renew_URL, OAUTH_URL, SEND_MSG_URL
+from value import *
 
 
 
+t = strftime('%Y%m%d%H%M%S')
 
-with open("./plaintext/key.json", "r") as key_file:
-    key_json = json.load(key_file)
-REQUEST_KEY = key_json["kakaoTalk"]["kakao_api_key"]
-AUTH_code = key_json["kakaoTalk"]["authorization_code"]
-RF_token = key_json["kakaoTalk"]["refresh_token"]
-
-
-def issue_refresh_token(): 
+# 토큰 발급 : access, refresh 토큰을 발급
+## 최초로 토큰을 발급받거나 refresh 토큰이 만료된 경우 실행
+def issue_access_token():
+    access_token = ""
+    refresh_token = ""
     data = {
-        "grant_type" : "refresh_token",
-        "client_id" : REQUEST_KEY,
+        "grant_type" : "authorization_code",
+        "client_id" : API_KEY,
         "redirect_URI" : REDIRECT_URI,
         "code" : AUTH_code,
-        "refresh_token" : RF_token,
     }
 
-    ###  ERROR  ###
-    oauth_request_POST = requests.post(OAUTH_URL, data=data)
-    token = oauth_request_POST.json()
-
-    with open("./plaintext/token_response.json", "w") as token_json:
-        json.dump(token, token_json, indent="\t")
-    with open("./plaintext/token_response.json", "r") as token_json:
-        token_data = json.load(token_json)
-    
-    # save issued value : refresh_token in key.json
-    try: 
-        refresh = token_data["refresh_token"]
-    except KeyError: # if error occured
-        print("NOTICE : lastest refresh token is still valid.")
-    else: # if error not occured
-        with open("./plaintext/key.json", "r") as code_json:
-            key_f_token_json = json.load(code_json)
-        key_f_token_json["kakaoTalk"]["refresh_token"] = refresh ### ?
-
-    # *무슨 절차인지 기술할 것*
+    request = requests.post(OAUTH_URL, data=data)
     try:
-        result = token_data["access_token"] # return
-    except KeyError:
-        renew_request_POST = requests.post(renew_URL, data=data)
-        renew = renew_request_POST.json()
+        access_token = request.content["access_token"]
+        try:
+            refresh_token = request.content["refresh_token"]
+            
+            # 발급받은 Refresh token을 token_response.json에 저장
+            with open("./key/token.json", "w") as token_json:
+                # json.dump(request, token_json, indent="\t")
+                if refresh_token == token_json["refresh_token"]:
+                    print("Notice:: Refresh Token is still valid.")
+                    print("system will maintain existed Refresh Token.")
+                else:    
+                    token_json["refresh_token"] = refresh_token
+        except:
+            print("Could not find 'refresh_token'.")
+    except:
+        print("Could not find 'access_token'.")
 
-        with open("./plaintext/token_response.json", "w") as renew_json:
-            json.dump(renew, renew_json, indent="\t")
-        issue_refresh_token()
-    return result
-    ###  ERROR  ###
+    request_json = request.json()
+    with open(f"./response/log/{t}_token_log.json", "w") as log:
+        json.dump(request_json, log, indent="\t")
+
+    return access_token
 
 
-access_token = issue_refresh_token()
-
-# access_token값 배정하기
-headers = {
+def access_token_info(access_token):
+    headers = {
     'Authorization' : "Bearer " + access_token
-}
-
-
-def renew_token():
-    data = {
-        
     }
+    token_info = requests.post("https://kapi.kakao.com/v1/user/access_token_info", headers=headers)
+    print(token_info.content)
 
 
-def send_message():
+def renew_refresh_token():
+    with open("./key/token.json", "r") as token_json:
+        refresh_token = token_json["refresh_token"]
+    data = {
+        "grant_type" : "refresh_token",
+        "client_id" : API_KEY,
+        "refresh_token" : refresh_token,
+    }
+    request = requests.post(OAUTH_URL, data=data)
+
+    try: 
+        refresh_token = request.content["refresh_token"]
+    except KeyError: # refresh token 만료 || 다른 에러
+        print("Notice:: Refresh Token expired. Need to issue new Token.")
+        issue_access_token()
+
+def send_message(access_token):
+    headers = {
+    'Authorization' : "Bearer " + access_token
+    }
     # KakaoTalk Rest API parameter
     data = { "template_object" : {
             "object_type": "list",
