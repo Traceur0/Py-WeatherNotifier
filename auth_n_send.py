@@ -12,8 +12,8 @@ t = strftime('%Y%m%d%H%M%S')
 # 토큰 발급 : access, refresh 토큰을 발급
 ## 최초로 토큰을 발급받거나 refresh 토큰이 만료된 경우 실행
 def issue_access_token():
-    access_token = ""
-    refresh_token = ""
+    access_token: str = ""
+    refresh_token: str = ""
     data = {
         "grant_type" : "authorization_code",
         "client_id" : API_KEY,
