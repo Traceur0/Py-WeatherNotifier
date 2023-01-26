@@ -1,6 +1,7 @@
-from auth_n_send import issue_access_token, send_message, renew_refresh_token, access_token_info
+from auth import request_auth_code, issue_access_token, renew_refresh_token, access_token_info
+from send_msg import send_message
 
 
 
-A_token = issue_access_token()
-
+# A_token = issue_access_token()
+request_auth_code()

@@ -24,7 +24,7 @@ REDIRECT_URI = "https://example.com/oauth"
 ## 또는 토큰 발급을 위한 인가 코드 받기 
 # *REQUEST_KEY의 경우에만 외부 파일에서 값을 받아옴*
 # * 또한 최초 실행시 parameter를 입력한 해당 주소로 이동하여 KakaoTalk 계정 로그인을 마친 후 이동된 URL의 마지막 부분(... &response_type=)의 숫자가 Autherization_code이다.
-renew_URL = f"https://kauth.kakao.com/oauth/authorize?client_id={API_KEY}&redirect_uri={REDIRECT_URI}&response_type=code"
+auth_code_URL = f"https://kauth.kakao.com/oauth/authorize?&response_type=code&client_id={API_KEY}&redirect_uri={REDIRECT_URI}"
 
 
 ## 토큰 받기
