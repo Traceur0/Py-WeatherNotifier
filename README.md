@@ -38,5 +38,6 @@
 > ```
 >
 > 위 코드처럼 문자열 "Bearer" 와 엑세스 토큰 사이에 공백이 한칸 있어야 정상적으로 요청이 가능하다
-> ex Bearer 2are34ldafef...
-> ^^^
+>
+> - ex) Bearer 2are34ldafef...
+> -          ^^^
