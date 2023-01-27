@@ -4,4 +4,4 @@ from send_msg import send_message
 
 
 # A_token = issue_access_token()
-request_auth_code()
+# request_auth_code()
