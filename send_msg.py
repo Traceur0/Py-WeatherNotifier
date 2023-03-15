@@ -1,13 +1,13 @@
 import requests
 
-from weather_info import open_wthr_info, naver_wthr_info
-from value import SEND_MSG_URL
+from weather_info import OW_WEATHER_INFO, NAVER_WEATHER_INFO
+from value import SEND_MSG_URI
 
 
 
 def send_message(access_token: str):
     headers = {
-    'Authorization' : "Bearer " + access_token
+    'Authorization' : "Bearer" + " " + access_token
     }
     # KakaoTalk Rest API parameter
     data = { "template_object" : {
@@ -19,7 +19,7 @@ def send_message(access_token: str):
                 "android_execution_params": "main",
             },
             "contents": [{
-                    "title": open_wthr_info,
+                    "title": OW_WEATHER_INFO,
                     "description": "OpenWeather API",
                     "image_url": "https://api.dicebear.com/5.x/icons/svg?icon=thermometer",
                     "image_width": "640",
@@ -31,7 +31,7 @@ def send_message(access_token: str):
                     }
                 },
                 {
-                    "title": naver_wthr_info,
+                    "title": NAVER_WEATHER_INFO,
                     "description": "Naver",
                     "image_url": "https://api.dicebear.com/5.x/icons/svg?icon=thermometer",
                     "image_width": "640",
@@ -47,5 +47,5 @@ def send_message(access_token: str):
     }
 
     # URL로 POST 요청
-    msg_rqst = requests.post(SEND_MSG_URL, headers=headers, data=data)
+    msg_rqst = requests.post(SEND_MSG_URI, headers=headers, data=data)
     return print(msg_rqst.content, access_token)
