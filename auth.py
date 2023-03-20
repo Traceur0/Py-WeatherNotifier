@@ -1,6 +1,9 @@
 import json
-import requests
 from time import strftime
+import webbrowser
+
+import clipboard
+import requests
 
 from err import *
 from value import API_KEY, AUTH_code, REDIRECT_URI, auth_code_URI, OAUTH_URI, INQUIRY_ACCESS_TOKEN_URI
@@ -12,7 +15,10 @@ from value import API_KEY, AUTH_code, REDIRECT_URI, auth_code_URI, OAUTH_URI, IN
 def request_auth_code() -> None:
     # 요청 URL 확인용
     print(auth_code_URI + "\n")
-    request = requests.get(auth_code_URI)
+    # request = requests.get(auth_code_URI)
+    webbrowser.open(auth_code_URI, new=1, autoraise=True)
+    if clipboard.paste():
+        print()
     """
         인가코드 요청 과정
         1. auth_code_URL로 GET요청
@@ -20,12 +26,14 @@ def request_auth_code() -> None:
         3. 이용에 필요한 정보 동의에 동의
         4. 페이지 이동 후 URL의 'code=' 뒷부분이 인가코드로 주어진다
     """
+    '''
     try:
         auth_url = request.url # Redirected URL
         print(auth_url)
     except:
         ### 수정 예정 - 정보에 동의하지 않는 경우 이외에도 더 많은 예외에 대응 필요
-        print("Error!! agreement needed") 
+        print("Error!! agreement needed")
+    '''
         
 
 
