@@ -1,4 +1,5 @@
 ### This file is made for URL-compliation purpose.
+
 import json
 
 
@@ -24,7 +25,7 @@ REDIRECT_URI = "https://example.com/oauth"
 auth_code_URI = f"https://kauth.kakao.com/oauth/authorize?&response_type=code&client_id={API_KEY}&redirect_uri={REDIRECT_URI}"
 
 
-# 액세스 토큰 요청/갱신
+# 토큰 요청/갱신 - 요청 파라미터에 따라 다른 동작
 OAUTH_URI = "https://kauth.kakao.com/oauth/token" 
 
 

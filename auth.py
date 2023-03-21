@@ -1,12 +1,12 @@
 import json
-from time import strftime
 import webbrowser
+from time import strftime
 
-import clipboard
 import requests
 
 from err import *
-from value import API_KEY, AUTH_code, REDIRECT_URI, auth_code_URI, OAUTH_URI, INQUIRY_ACCESS_TOKEN_URI
+from value import (API_KEY, INQUIRY_ACCESS_TOKEN_URI, OAUTH_URI, REDIRECT_URI,
+                   AUTH_code, auth_code_URI)
 
 
 
@@ -17,8 +17,17 @@ def request_auth_code() -> None:
     print(auth_code_URI + "\n")
     # request = requests.get(auth_code_URI)
     webbrowser.open(auth_code_URI, new=1, autoraise=True)
-    if clipboard.paste():
-        print()
+    # code = 
+    # while True:
+    #     if code != "" or code != None:
+    #         print(code)
+    #         break
+    #     else:
+    #         pass
+    # print("EOF")
+            
+        # with open("./plaintext/token.json", "r") as key_file:
+        #     key_json = json.load(key_file)
     """
         인가코드 요청 과정
         1. auth_code_URL로 GET요청
@@ -43,7 +52,7 @@ def request_auth_code() -> None:
     - 토큰 '최초' 발급시 
     - refresh token 만료시
 '''
-def issue_access_token() -> str:
+def issue_token() -> None:
     # 변수 Initialize - improvisation for UnboundLocalError
     access_token: str = "N/A" # not applicable, 해당 없음, 유효하지 않음, 공백
     refresh_token: str = "N/A"
@@ -54,31 +63,35 @@ def issue_access_token() -> str:
         "redirect_URI" : REDIRECT_URI,
         "code" : AUTH_code,
     }
-
+    
     request = requests.post(OAUTH_URI, data=data)
+    content = request.json()
+    
+    ### 재설계 필요 ###
     try:
-        access_token = request.content["access_token"]
-        try:
-            refresh_token = request.content["refresh_token"]
+        print(content)      # DEBUGGING
+        access_token = content["access_token"]
+        refresh_token = content["refresh_token"]
+        with open("./plaintext/token.json", "r") as token_json:
             
-            # 발급받은 Refresh token을 token_response.json에 저장
-            with open("./key/token.json", "w") as token_json:
+            '''
                 # json.dump(request, token_json, indent="\t")
                 if refresh_token == token_json["refresh_token"]:
-                    raise RefreshTokenNotExpired
-                else:    
-                    token_json["refresh_token"] = refresh_token
-        except:
-            raise RefreshTokenNotFound
+                    raise #RefreshTokenNotExpired
+                else:       # 발급받은 Refresh token을 token_response.json에 저장
+                    with open("./plaintext/token.json", "w") as token_json:    
+                        token_json["refresh_token"] = refresh_token
+            '''
     except:
-        raise AccessTokenNotFound
+        # 발급 과정에서 에러 발생
+        print("err, token not issued")
+        raise TokenNotFound
 
+    # Logging
     request_json = request.json()
     time_info = strftime('%Y%m%d%H%M%S')
     with open(f"./response/log/{time_info}_token_log.json", "w") as log:
         json.dump(request_json, log, indent="\t")
-
-    return access_token
 
 
 def access_token_info(access_token: str) -> None:
@@ -89,7 +102,8 @@ def access_token_info(access_token: str) -> None:
     print(token_info.content)
 
 
-def renew_refresh_token() -> None:
+# 기존의 refresh 토큰을 이용하여 Access token 재발행과 동시에 refresh token도 재발행
+def renew_both_token() -> None:
     with open("./key/token.json", "r") as token_json:
         refresh_token = token_json["refresh_token"]
     data = {
@@ -98,8 +112,11 @@ def renew_refresh_token() -> None:
         "refresh_token" : refresh_token,
     }
     request = requests.post(OAUTH_URI, data=data)
-    try: 
-        refresh_token = request.content["refresh_token"]
-    except KeyError: # refresh token 만료 또는 다른 에러
-        issue_access_token()
-        raise RefreshTokenExpired           ### 확인 필요
+    content = request.json()
+    try:
+        # response.json에 refresh token값이 있는지 확인
+        refresh_token = content["refresh_token"]
+    except KeyError:
+        # refresh token값이 갱신되지 않았다면 유효기간이 1개월 미만으로 남은 경우
+        # issue_token()
+        raise RefreshTokenNotExpired

@@ -1,6 +1,7 @@
-from bs4 import BeautifulSoup
 import json
+
 import requests
+from bs4 import BeautifulSoup
 
 
 
@@ -13,8 +14,8 @@ NAVER_WEATHER_INFO = parsing.select_one("div.temperature_text").text
 
 
 # OpenWeather api weatherInfo
-with open("./plaintext/key.json", "r") as key_file:
-    key_json = json.load(key_file)
+with open("./plaintext/key.json", "r") as key_file:     
+    key_json = json.load(key_file)    
 
 city_name = "seoul"
 key_OW = key_json["openWeather"]["openWeather_api_key"]
