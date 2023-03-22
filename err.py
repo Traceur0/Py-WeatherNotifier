@@ -6,7 +6,7 @@ class RefreshTokenNotExpired(Exception):
 
 class TokenNotFound(Exception):
   def __str__(self):
-    return "Could not find 'refresh_token'."
+    return "By Occuring Error, token has not been issued."
 
 
 class RefreshTokenExpired(Exception):

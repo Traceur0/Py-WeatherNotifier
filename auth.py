@@ -45,17 +45,18 @@ def request_auth_code() -> None:
     '''
         
 
-
-# Access, Refresh 토큰 발급
 '''
     용례
-    - 토큰 '최초' 발급시 
-    - refresh token 만료시
+    - 토큰 '최초' 발급 시 
+    - refresh token 만료 시
+
+    * 토큰 발급 시에는 항상 access, refresh token이 함께 발급
 '''
 def issue_token() -> None:
     # 변수 Initialize - improvisation for UnboundLocalError
     access_token: str = "N/A" # not applicable, 해당 없음, 유효하지 않음, 공백
     refresh_token: str = "N/A"
+
 
     data = {
         "grant_type" : "authorization_code",
@@ -68,26 +69,35 @@ def issue_token() -> None:
     content = request.json()
     
     ### 재설계 필요 ###
+    # 
     try:
         print(content)      # DEBUGGING
         access_token = content["access_token"]
         refresh_token = content["refresh_token"]
         with open("./plaintext/token.json", "r") as token_json:
-            
+            if token_json["refresh_token"] != "":
+                ...
+                # renew_both_token()
+            else:
+                with open("./plaintext/token.json", "w") as token_json:    
+                    token_json["refresh_token"] = refresh_token
+                    token_json["access_token"] = access_token
             '''
+                #LOGGING
+
+                
                 # json.dump(request, token_json, indent="\t")
                 if refresh_token == token_json["refresh_token"]:
                     raise #RefreshTokenNotExpired
                 else:       # 발급받은 Refresh token을 token_response.json에 저장
-                    with open("./plaintext/token.json", "w") as token_json:    
-                        token_json["refresh_token"] = refresh_token
+                    
             '''
     except:
         # 발급 과정에서 에러 발생
-        print("err, token not issued")
+        print(content)
         raise TokenNotFound
 
-    # Logging
+    #Logging
     request_json = request.json()
     time_info = strftime('%Y%m%d%H%M%S')
     with open(f"./response/log/{time_info}_token_log.json", "w") as log:
@@ -98,14 +108,16 @@ def access_token_info(access_token: str) -> None:
     headers = {
     'Authorization' : "Bearer " + access_token
     }
-    token_info = requests.post(INQUIRY_ACCESS_TOKEN_URI, headers=headers)
+    token_info = requests.get(INQUIRY_ACCESS_TOKEN_URI, headers=headers)
     print(token_info.content)
 
 
 # 기존의 refresh 토큰을 이용하여 Access token 재발행과 동시에 refresh token도 재발행
-def renew_both_token() -> None:
-    with open("./key/token.json", "r") as token_json:
+def renew_both_token(refresh_token: str) -> None:
+    '''
+        with open("./key/token.json", "r") as token_json:
         refresh_token = token_json["refresh_token"]
+    '''
     data = {
         "grant_type" : "refresh_token",
         "client_id" : API_KEY,
@@ -116,6 +128,8 @@ def renew_both_token() -> None:
     try:
         # response.json에 refresh token값이 있는지 확인
         refresh_token = content["refresh_token"]
+        with open("./plaintext/token.json", "w") as token_json:    
+            token_json["refresh_token"] = refresh_token
     except KeyError:
         # refresh token값이 갱신되지 않았다면 유효기간이 1개월 미만으로 남은 경우
         # issue_token()
