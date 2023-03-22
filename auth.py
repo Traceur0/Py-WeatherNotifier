@@ -17,6 +17,9 @@ def request_auth_code() -> None:
     print(auth_code_URI + "\n")
     # request = requests.get(auth_code_URI)
     webbrowser.open(auth_code_URI, new=1, autoraise=True)
+    access_token_input = input("AccessTokenValue: ")
+    if access_token_input != "":
+        with open()
     # code = 
     # while True:
     #     if code != "" or code != None:
@@ -57,7 +60,6 @@ def issue_token() -> None:
     access_token: str = "N/A" # not applicable, 해당 없음, 유효하지 않음, 공백
     refresh_token: str = "N/A"
 
-
     data = {
         "grant_type" : "authorization_code",
         "client_id" : API_KEY,
@@ -68,16 +70,15 @@ def issue_token() -> None:
     request = requests.post(OAUTH_URI, data=data)
     content = request.json()
     
-    ### 재설계 필요 ###
-    # 
     try:
         print(content)      # DEBUGGING
         access_token = content["access_token"]
         refresh_token = content["refresh_token"]
         with open("./plaintext/token.json", "r") as token_json:
+            
             if token_json["refresh_token"] != "":
                 ...
-                # renew_both_token()
+            # renew_both_token()
             else:
                 with open("./plaintext/token.json", "w") as token_json:    
                     token_json["refresh_token"] = refresh_token

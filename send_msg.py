@@ -1,3 +1,4 @@
+import json
 import requests
 
 from weather_info import OW_WEATHER_INFO, NAVER_WEATHER_INFO
@@ -7,10 +8,12 @@ from value import SEND_MSG_URI
 
 def send_message(access_token: str):
     headers = {
-    'Authorization' : "Bearer" + " " + access_token
+        'Content-Type' : 'application/x-www-form-urlencoded',
+        'Authorization' : "Bearer " + access_token
     }
     # KakaoTalk Rest API parameter
-    data = { "template_object" : {
+    data = {
+            "template_object" : json.dumps({
             "object_type": "list",
             "header_title": "오늘 서울 기온",
             "header_link": {
@@ -43,7 +46,7 @@ def send_message(access_token: str):
                     }
                 }
             ]
-        }
+        })
     }
 
     # URL로 POST 요청
