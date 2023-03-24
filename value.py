@@ -5,14 +5,14 @@ import json
 
 
 # API 요청에 필요한 값들을 json에서 import
-with open("./plaintext/key.json", "r") as key_file:
-    key_json = json.load(key_file)
-API_KEY = key_json["kakaoTalk"]["kakao_api_key"]
+with open("./plaintext/key.json", "r") as file:
+    key = json.load(file)
+API_KEY = key["kakao_api_key"]
 
-with open("./plaintext/token.json", "r") as token_file:
-    token_json = json.load(token_file)
-AUTH_code = token_json["authorization_code"]
-R_token = token_json["refresh_token"]
+with open("./plaintext/token.json", "r") as file:
+    token = json.load(file)
+AUTH_code = token["authorization_code"]
+R_token = token["refresh_token"]
 
 
 # 인가코드 요청 - 로그인
@@ -40,3 +40,9 @@ INQUIRY_ACCESS_TOKEN_URI = "https://kapi.kakao.com/v1/user/access_token_info"
 
 ## Refresh token 과 Access token
 ## Refresh token은 Access token과 비교해서 상대적으로 긴 유효기간을 가지고 있음.
+
+
+PATH_KEY = "./plaintext/key.json"
+
+
+PATH_TOKEN = "./plaintext/token.json"

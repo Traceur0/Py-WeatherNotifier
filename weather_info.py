@@ -14,11 +14,11 @@ NAVER_WEATHER_INFO = parsing.select_one("div.temperature_text").text
 
 
 # OpenWeather api weatherInfo
-with open("./plaintext/key.json", "r") as key_file:     
-    key_json = json.load(key_file)    
+with open("./plaintext/key.json", "r") as file:     
+    key = json.load(file)    
 
 city_name = "seoul"
-key_OW = key_json["openWeather"]["openWeather_api_key"]
+key_OW = key["openWeather_api_key"]
 lang_code = "kr"
 
 open_wthr_URL = f"https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={key_OW}&lang={lang_code}&units=metric"

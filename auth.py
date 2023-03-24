@@ -4,14 +4,13 @@ from time import strftime
 
 import requests
 
-from err import *
+from err import RefreshTokenStillValid
 from value import (API_KEY, INQUIRY_ACCESS_TOKEN_URI, OAUTH_URI, REDIRECT_URI,
                    AUTH_code, auth_code_URI)
 
 
 
 # 인가 코드(authorization_code) 발급
-## 카카오 계정 로그인 과정이 포함되어 있어 개발에 어려움이 있음. 현재 보류중
 def request_auth_code() -> None:
     # 요청 URL 확인용
     print(auth_code_URI + "\n")
@@ -19,7 +18,8 @@ def request_auth_code() -> None:
     webbrowser.open(auth_code_URI, new=1, autoraise=True)
     access_token_input = input("AccessTokenValue: ")
     if access_token_input != "":
-        with open()
+        with open():
+            ...
     # code = 
     # while True:
     #     if code != "" or code != None:
@@ -46,7 +46,7 @@ def request_auth_code() -> None:
         ### 수정 예정 - 정보에 동의하지 않는 경우 이외에도 더 많은 예외에 대응 필요
         print("Error!! agreement needed")
     '''
-        
+
 
 '''
     용례
@@ -96,7 +96,7 @@ def issue_token() -> None:
     except:
         # 발급 과정에서 에러 발생
         print(content)
-        raise TokenNotFound
+        raise RefreshTokenStillValid
 
     #Logging
     request_json = request.json()
@@ -134,4 +134,4 @@ def renew_both_token(refresh_token: str) -> None:
     except KeyError:
         # refresh token값이 갱신되지 않았다면 유효기간이 1개월 미만으로 남은 경우
         # issue_token()
-        raise RefreshTokenNotExpired
+        raise RefreshTokenStillValid
