@@ -28,6 +28,8 @@ def request_auth_code() -> None:
     #     else:
     #         pass
     # print("EOF")
+
+
             
         # with open("./plaintext/token.json", "r") as key_file:
         #     key_json = json.load(key_file)
@@ -54,9 +56,8 @@ def request_auth_code() -> None:
     - refresh token 만료 시
 
     * 토큰 발급 시에는 항상 access, refresh token이 함께 발급
-'''
-def issue_token() -> None:
-    # 변수 Initialize - improvisation for UnboundLocalError
+'''0
+def issue_token() -> None:    # 변수 Initialize - improvisation for UnboundLocalError
     access_token: str = "N/A" # not applicable, 해당 없음, 유효하지 않음, 공백
     refresh_token: str = "N/A"
 
@@ -86,7 +87,6 @@ def issue_token() -> None:
             '''
                 #LOGGING
 
-                
                 # json.dump(request, token_json, indent="\t")
                 if refresh_token == token_json["refresh_token"]:
                     raise #RefreshTokenNotExpired

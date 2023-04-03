@@ -9,9 +9,17 @@ class JSON_Read:
       keyword :str - json 파일에서 검색할 value의 key값에 해당하는 문자열
   """
 
+  @staticmethod
+  def read_json_2(path, keyword) -> str:
+    with open(path, "r") as file:
+      json_parse = json.load(file)
+      return json_parse[keyword]
+
+
   def __init__(self, path, keyword):
     self.path = path
     self.keyword = keyword
+
 
   def read_json(self) -> str:
     with open(self.path, "r") as file:
@@ -31,6 +39,7 @@ class JSON_Write:
     self.path = path
     self.keyword = keyword
     self.value = value
+
 
   @classmethod
   def write_json(cls) -> None:

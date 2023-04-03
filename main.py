@@ -2,15 +2,18 @@
 # from send_msg import send_message
 
 #from auth import issue_token, request_auth_code
-from file_io import JSON_Read, JSON_Write
+# from io_class import JSON_Read, JSON_Write
+from io_func import read_json
 #from send_msg import send_message
 #from value import PATH_KEY, PATH_TOKEN
 #import json
 
 
 
-json_str = JSON_Read("./test.json","test").read_json()
+# json_str = JSON_Read("./test.json","test").read_json()
+json_str = read_json("./test.json", "test")
 print(json_str)
+
 
 '''
 with open("./plaintext/token.json", "r") as file:
