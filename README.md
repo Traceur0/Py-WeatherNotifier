@@ -10,7 +10,7 @@
 
 ## 프로그램 동작 순서
 
-> 카카오 계정을 통한 REST API 인증 과정은 Kakao developers에서 안내하는 과정과 동일합니다
+> 카카오 계정을 통한 인증 REST API 이용 안내를 따라 작성한 코드입니다
 > https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api#before-you-begin-process
 
 1. 카카오계정 로그인 후 리다이렉트 페이지로 이동 후 REDIRECT URI을 통해 Authorization_code 수령

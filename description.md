@@ -10,3 +10,10 @@ with open("./plaintext/token.json", "r") as token_file:
 AUTH_code = token_json["authorization_code"]
 R_token = token_json["refresh_token"]
 ```
+
+### 인가코드 요청 과정
+
+> 1. auth_code_URL로 GET요청
+> 2. 카카오 계정 로그인 페이지로 리다이렉트(세션에 로그인 기록이 있으면 생략)
+> 3. 이용에 필요한 정보 동의에 동의
+> 4. 페이지 이동 후 URL의 'code=' 뒷부분이 인가코드로 주어진다
