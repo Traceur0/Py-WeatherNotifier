@@ -14,6 +14,7 @@ NAVER_WEATHER_INFO = parsing.select_one("div.temperature_text").text
 
 
 # OpenWeather api weatherInfo
+### I/O
 with open("./plaintext/key.json", "r") as file:     
     key = json.load(file)    
 

@@ -1,3 +1,7 @@
+"""
+  DEPRECATED
+"""
+
 import json
 
 
@@ -10,13 +14,13 @@ class JSON_Read:
   """
 
   @staticmethod
-  def read_json_2(path, keyword) -> str:
+  def read_json_2(path : str, keyword: str) -> str:
     with open(path, "r") as file:
       json_parse = json.load(file)
       return json_parse[keyword]
 
 
-  def __init__(self, path, keyword):
+  def __init__(self, path : str, keyword : str):
     self.path = path
     self.keyword = keyword
 
@@ -35,7 +39,7 @@ class JSON_Write:
       value   :str - 수정할 내용의 문자열
   """
   
-  def __init__(self, path, keyword, value):
+  def __init__(self, path : str, keyword : str, value : str):
     self.path = path
     self.keyword = keyword
     self.value = value

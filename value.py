@@ -5,6 +5,7 @@ import json
 
 
 # API 요청에 필요한 값들을 json에서 import
+### I/O
 with open("./plaintext/key.json", "r") as file:
     key = json.load(file)
 API_KEY = key["kakao_api_key"]
