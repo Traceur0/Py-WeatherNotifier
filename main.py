@@ -17,6 +17,6 @@ A_token = token_json["access_token"]
 send_message(A_token)
 '''
 
-request_auth_code()
+# request_auth_code()
 
-issue_token(j_read("./plaintext/test.json", "authorization_code"))
+# issue_token(j_read("./plaintext/test.json", "authorization_code"))
