@@ -66,26 +66,30 @@ def issue_token(authorization_code: str) -> None:
     request = requests.post(OAUTH_URI, data=data)
     content = request.json()
 
-    try:
-        response = f"""
-  token type                : {content["token_type"]}
-  access token              : {content["access_token"]}
-  expires in                : {content["expires_in"]}
-  refresh token             : {content["refresh_token"]}
-  refresh token expires in  : {content["refresh_token_expires_in"]}
-    """
+    try:  # 시도할 작업
         access_token = content["access_token"]
         refresh_token = content["refresh_token"]
-    except KeyError:
-        print(content)
+    except KeyError:  # 에러 발생시
         # 발급 과정에서 에러 발생
         raise Exception  # RefreshTokenStillValid ?
-    else:
-        print(response)
+    else:  # 에러 발생하지 않을 시
         # I/O - 토큰값 JSON 파일에 저장 - 수정 필요
         PATH = Write(PATH_TOKEN)
         PATH.j_writes("refresh_token", refresh_token)
         PATH.j_writes("access_token", access_token)
+    finally:  # 에러 발생 여부와 관계없이 실행
+        # printing response
+        content_keys: list = content.keys()
+        for key in content_keys:
+            print("{0:<28} | {1}".format(key, content[key]))
+#         response = f"""
+#   token type                : {content["token_type"]}
+#   access token              : {content["access_token"]}
+#   expires in                : {content["expires_in"]}
+#   refresh token             : {content["refresh_token"]}
+#   refresh token expires in  : {content["refresh_token_expires_in"]}
+#         """
+
     print("End Of Line")
     """
     # Logging
