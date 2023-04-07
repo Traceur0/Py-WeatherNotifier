@@ -1,3 +1,29 @@
+# Description
+
+# 프로젝트 파일 구조
+
+├─ log
+│ ├─
+│ ├─
+│ └─
+├─ plaintext
+│ ├─ json
+│ ├─
+│ └─
+├─ .gitignore
+├─ auth.py
+├─ description.md
+├─ err.py
+├─ init.py
+├─ io_func.py
+├─ main.py
+├─ README.md
+├─ send_msg.py
+├─ value.py
+└─ weather_info.py
+
+### I/O (JSON 파일 읽기/쓰기 관련 문제)
+
 json 읽고 쓰기 방식을 코드로 작성하는 데 문제가 있는 것으로 확인됩니다
 
 TypeError: '\_io.TextIOWrapper' object is not subscriptable
