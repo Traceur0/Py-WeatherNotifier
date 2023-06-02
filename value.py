@@ -4,11 +4,11 @@ from io_func import j_read
 
 
 # file PATH
-PATH_KEY: str = "./plaintext/key.json"
+PATH_KEY: str = r"./plaintext/key.json"
 
-PATH_TOKEN: str = "./plaintext/token.json"
+PATH_TOKEN: str = r"./plaintext/token.json"
 
-PATH_TEST: str = "./plaintext/test.json"
+PATH_TEST: str = r"./plaintext/test.json"
 
 
 # API 요청에 필요한 값들을 JSON파일에서 import

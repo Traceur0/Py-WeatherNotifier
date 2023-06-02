@@ -4,8 +4,8 @@ from send_msg import send_message
 from value import PATH_TEST
 
 
-request_auth_code()
+# request_auth_code()
 
-issue_token(j_read(PATH_TEST, "authorization_code"))
+# issue_token(j_read(PATH_TEST, "authorization_code"))
 
-send_message(j_read(PATH_TEST, "access_token"))
+print(send_message(j_read(PATH_TEST, "access_token")))

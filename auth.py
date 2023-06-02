@@ -1,12 +1,12 @@
 import webbrowser
-from time import strftime, sleep
+from time import sleep, strftime
 
 import requests
 
 from err import InvalidTokenRequest, RefreshTokenStillValid
-from io_func import j_read, j_write, Write
-from value import (API_KEY, INQUIRY_ACCESS_TOKEN_URI, OAUTH_URI, REDIRECT_URI,
-                   auth_code_URI, PATH_TOKEN, PATH_TEST)
+from io_func import Write, j_read, j_write
+from value import (API_KEY, INQUIRY_ACCESS_TOKEN_URI, OAUTH_URI, PATH_TEST,
+                   PATH_TOKEN, REDIRECT_URI, auth_code_URI)
 
 
 def request_auth_code() -> None:
@@ -25,6 +25,9 @@ def request_auth_code() -> None:
     while True:
         access_token_input = input("URL: ")
         input_content = access_token_input.replace("URL: ", "")
+        # regex = compile(r"https://example.com/oauth?code=(.+)")
+        # input_content = regex.match(input_content)
+        input_content = input_content[31:]
 
         if input_content == "" or None:
             print("[alert]Input value vacant. Retry required")

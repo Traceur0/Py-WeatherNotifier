@@ -41,7 +41,7 @@ class Write:
     def __init__(self, path):
         self.path = path
 
-    def j_writes(self, keyword, value):
+    def j_writes(self, keyword: str, value: str) -> None:
         """
         JSON 파일 쓰기
         @params:
