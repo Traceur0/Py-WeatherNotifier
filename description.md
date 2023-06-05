@@ -2,24 +2,24 @@
 
 ## 프로젝트 파일 구조
 
-> ├─ log
-> │ ├─
-> │ ├─
-> │ └─
-> ├─ plaintext
-> │ ├─ json
-> │ ├─
-> │ └─
-> ├─ .gitignore
-> ├─ auth.py
-> ├─ description.md
-> ├─ err.py
-> ├─ init.py
-> ├─ io_func.py
-> ├─ main.py
-> ├─ README.md
-> ├─ send_msg.py
-> ├─ value.py
+> ├─ log  
+> │ ├─  
+> │ ├─  
+> │ └─  
+> ├─ plaintext  
+> │ ├─ json  
+> │ ├─  
+> │ └─  
+> ├─ .gitignore  
+> ├─ auth.py  
+> ├─ description.md  
+> ├─ err.py  
+> ├─ init.py  
+> ├─ io_func.py  
+> ├─ main.py  
+> ├─ README.md  
+> ├─ send_msg.py  
+> ├─ value.py  
 > └─ weather_info.py
 
 ### I/O (JSON 파일 읽기/쓰기 관련 문제)
