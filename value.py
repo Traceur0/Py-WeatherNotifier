@@ -8,17 +8,10 @@ PATH_KEY: str = r"./plaintext/key.json"
 
 PATH_TOKEN: str = r"./plaintext/token.json"
 
-PATH_TEST: str = r"./plaintext/test.json"
-
 
 # API 요청에 필요한 값들을 JSON파일에서 import
 # I/O
 API_KEY = j_read(PATH_KEY, "kakao_api_key")
-
-
-AUTH_code = j_read(PATH_TOKEN, "authorization_code")
-
-R_token = j_read(PATH_TOKEN, "refresh_token")
 
 
 # 인가코드 요청 - 로그인
